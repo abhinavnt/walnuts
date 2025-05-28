@@ -4,20 +4,37 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Card } from "../ui/Card";
 import { X } from "lucide-react";
-import { ref, onValue, push } from 'firebase/database';
+import { ref, onValue, push, set } from 'firebase/database';
 import { db } from "../../config/firebaseConfig";
 import { toast } from "sonner";
 
-export function AddProductForm() {
+interface ProductListItem {
+  id: string;
+  name: string;
+  price: string;
+  originalPrice?: string;
+  description: string;
+  categoryId: string;
+  tag: string;
+  image?: string;
+}
+
+interface ProductFormProps {
+  productToEdit?: ProductListItem | null;
+  onSubmitSuccess?: () => void;
+}
+
+export function ProductForm({ productToEdit, onSubmitSuccess }: ProductFormProps) {
+  const isEditMode = !!productToEdit;
   const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    originalPrice: "",
-    description: "",
-    categoryId: "",
-    tag: "",
+    name: productToEdit?.name || "",
+    price: productToEdit?.price || "",
+    originalPrice: productToEdit?.originalPrice || "",
+    description: productToEdit?.description || "",
+    categoryId: productToEdit?.categoryId || "",
+    tag: productToEdit?.tag || "",
   });
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(productToEdit?.image || null);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -35,7 +52,6 @@ export function AddProductForm() {
         setCategories([]);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -69,20 +85,20 @@ export function AddProductForm() {
         ...formData,
         image: image || '',
       };
-      await push(ref(db, 'products'), productData);
-      toast.success(`Product "${formData.name}" added successfully!`);
-      setFormData({
-        name: "",
-        price: "",
-        originalPrice: "",
-        description: "",
-        categoryId: "",
-        tag: "",
-      });
-      setImage(null);
+
+      if (isEditMode) {
+        const productRef = ref(db, `products/${productToEdit!.id}`);
+        await set(productRef, productData);
+        toast.success(`Product "${formData.name}" updated successfully!`);
+      } else {
+        await push(ref(db, 'products'), productData);
+        toast.success(`Product "${formData.name}" added successfully!`);
+      }
+
+      onSubmitSuccess?.();
     } catch (error) {
-      console.error("Error adding product:", error);
-      toast.error("Failed to add product. Please try again.");
+      console.error("Error saving product:", error);
+      toast.error("Failed to save product. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -90,7 +106,9 @@ export function AddProductForm() {
 
   return (
     <Card className="p-6 max-w-2xl">
-      <h3 className="text-lg font-semibold text-[#651C32] mb-4">Add New Product</h3>
+      <h3 className="text-lg font-semibold text-[#651C32] mb-4">
+        {isEditMode ? "Edit Product" : "Add New Product"}
+      </h3>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div>
@@ -106,7 +124,6 @@ export function AddProductForm() {
               required
             />
           </div>
-
           <div>
             <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
               Category
@@ -127,7 +144,6 @@ export function AddProductForm() {
             </select>
           </div>
         </div>
-
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
@@ -142,7 +158,6 @@ export function AddProductForm() {
               required
             />
           </div>
-
           <div>
             <label htmlFor="originalPrice" className="block text-sm font-medium text-gray-700 mb-2">
               Original Price (₹)
@@ -156,7 +171,6 @@ export function AddProductForm() {
             />
           </div>
         </div>
-
         <div>
           <label htmlFor="tag" className="block text-sm font-medium text-gray-700 mb-2">
             Product Tag
@@ -169,7 +183,6 @@ export function AddProductForm() {
             placeholder="e.g., Premium Quality, Best Seller"
           />
         </div>
-
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
             Description
@@ -184,7 +197,6 @@ export function AddProductForm() {
             required
           />
         </div>
-
         <div className="space-y-4">
           <label className="block text-sm font-medium text-gray-700">Product Image</label>
           <button
@@ -207,9 +219,8 @@ export function AddProductForm() {
             </div>
           )}
         </div>
-
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Adding Product..." : "Add Product"}
+          {isSubmitting ? (isEditMode ? "Updating Product..." : "Adding Product...") : (isEditMode ? "Update Product" : "Add Product")}
         </Button>
       </form>
     </Card>

@@ -1,94 +1,90 @@
-import { useState, useEffect } from "react"
-import { Edit, Trash2 } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Trash2 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
-import { ref, onValue, remove } from "firebase/database"
-import { db } from "../../config/firebaseConfig"
-import { toast } from "sonner"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { ref, onValue, remove } from "firebase/database";
+import { db } from "../../config/firebaseConfig";
+import { toast } from "sonner";
 
-// Interface for Product list items with ID
 interface ProductListItem {
-  id: string
-  name: string
-  price: string
-  originalPrice?: string
-  description: string
-  categoryId: string
-  tag: string
-  image?: string
+  id: string;
+  name: string;
+  price: string;
+  originalPrice?: string;
+  description: string;
+  categoryId: string;
+  tag: string;
+  image?: string;
 }
 
-export function ProductList() {
-  const [allProducts, setAllProducts] = useState<ProductListItem[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [productToDelete, setProductToDelete] = useState<ProductListItem | null>(null)
-  const pageSize = 5
+interface ProductListProps {
+  onEditClick: (product: ProductListItem) => void;
+}
 
-  // Fetch products from Firebase
+export function ProductList({ onEditClick }: ProductListProps) {
+  const [allProducts, setAllProducts] = useState<ProductListItem[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<ProductListItem | null>(null);
+  const pageSize = 5;
+
   useEffect(() => {
-    const productsRef = ref(db, "products")
+    const productsRef = ref(db, "products");
     const unsubscribe = onValue(productsRef, (snapshot) => {
-      const data = snapshot.val()
+      const data = snapshot.val();
       if (data) {
         const productsList = Object.entries(data)
           .map(([id, product]) => ({
             id,
             ...(product as Omit<ProductListItem, "id">),
           }))
-          .sort((a, b) => a.name.localeCompare(b.name))
-        setAllProducts(productsList)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        setAllProducts(productsList);
       } else {
-        setAllProducts([])
+        setAllProducts([]);
       }
-    })
-    return () => unsubscribe()
-  }, [])
+    });
+    return () => unsubscribe();
+  }, []);
 
-  // Adjust currentPage if it exceeds total pages (e.g., after deletions)
   useEffect(() => {
-    const totalPages = Math.ceil(allProducts.length / pageSize)
+    const totalPages = Math.ceil(allProducts.length / pageSize);
     if (totalPages > 0 && currentPage > totalPages) {
-      setCurrentPage(totalPages)
+      setCurrentPage(totalPages);
     } else if (totalPages === 0) {
-      setCurrentPage(1)
+      setCurrentPage(1);
     }
-  }, [allProducts, currentPage, pageSize])
+  }, [allProducts, currentPage, pageSize]);
 
-  // Calculate products for the current page
-  const indexOfLastProduct = currentPage * pageSize
-  const indexOfFirstProduct = indexOfLastProduct - pageSize
-  const currentProducts = allProducts.slice(indexOfFirstProduct, indexOfLastProduct)
-  const totalPages = Math.ceil(allProducts.length / pageSize)
+  const indexOfLastProduct = currentPage * pageSize;
+  const indexOfFirstProduct = indexOfLastProduct - pageSize;
+  const currentProducts = allProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(allProducts.length / pageSize);
 
   const handleDeleteClick = (product: ProductListItem) => {
-    setProductToDelete(product)
-    setDeleteDialogOpen(true)
-  }
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
+  };
 
   const handleDeleteConfirm = async () => {
-    if (!productToDelete) return
+    if (!productToDelete) return;
 
     try {
-      await remove(ref(db, `products/${productToDelete.id}`))
-      toast.success("Product deleted successfully")
-      setDeleteDialogOpen(false)
-      setProductToDelete(null)
+      await remove(ref(db, `products/${productToDelete.id}`));
+      toast.success("Product deleted successfully");
+      setDeleteDialogOpen(false);
+      setProductToDelete(null);
     } catch (error) {
-      console.error("Error deleting product:", error)
-      toast.error("Failed to delete product")
+      console.error("Error deleting product:", error);
+      toast.error("Failed to delete product");
     }
-  }
+  };
 
   const handleDeleteCancel = () => {
-    setDeleteDialogOpen(false)
-    setProductToDelete(null)
-  }
-
-  const handleEdit = (id: string) => {
-    alert(`Edit functionality for product ${id} would be implemented here`)
-  }
+    setDeleteDialogOpen(false);
+    setProductToDelete(null);
+  };
 
   return (
     <>
@@ -114,8 +110,8 @@ export function ProductList() {
                 </div>
               </div>
               <div className="flex space-x-2">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(product.id)}>
-                  <Edit className="w-4 h-4" />
+                <Button size="sm" variant="outline" onClick={() => onEditClick(product)}>
+                  Edit
                 </Button>
                 <Button
                   size="sm"
@@ -152,7 +148,6 @@ export function ProductList() {
         )}
       </Card>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -172,5 +167,5 @@ export function ProductList() {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

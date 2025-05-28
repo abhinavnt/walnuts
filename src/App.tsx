@@ -17,6 +17,7 @@ import { AdminDashboard } from "./pages/admin/AdminDashboard"
 import { AdminProducts } from "./pages/admin/AdminProducts"
 import { AdminCategories } from "./pages/admin/AdminCategories"
 import { Toaster } from "sonner"
+import { ProductForm } from "./components/admin/ProductForm"
 
 // import "./styles/global.css"
 
@@ -119,7 +120,9 @@ function App() {
             }
           />
         </Routes>
+        
       </div>
+      
     </Router>
   )
 }
