@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Custom brand colors */
+    --brand-primary: #651c32;
+    --brand-secondary: #8b2635;
+    --brand-accent: #faede2;
+  }
+
+  * {
+    border-color: rgb(229 231 235); /* border-gray-200 */
+  }
+
+  body {
+    background-color: white;
+    color: rgb(15 23 42); /* text-slate-900 */
+    font-family: "Inter", sans-serif;
+  }
+
+  .font-serif {
+    font-family: "Playfair Display", serif;
+  }
+}
+
+/* Custom brand color utilities */
+@layer utilities {
+  .bg-brand-primary {
+    background-color: var(--brand-primary);
+  }
+
+  .bg-brand-secondary {
+    background-color: var(--brand-secondary);
+  }
+
+  .bg-brand-accent {
+    background-color: var(--brand-accent);
+  }
+
+  .text-brand-primary {
+    color: var(--brand-primary);
+  }
+
+  .text-brand-secondary {
+    color: var(--brand-secondary);
+  }
+
+  .text-brand-accent {
+    color: var(--brand-accent);
+  }
+
+  .border-brand-primary {
+    border-color: var(--brand-primary);
+  }
+
+  .border-brand-secondary {
+    border-color: var(--brand-secondary);
+  }
+
+  .border-brand-accent {
+    border-color: var(--brand-accent);
+  }
+
+  .hover\:bg-brand-primary:hover {
+    background-color: var(--brand-primary);
+  }
+
+  .hover\:bg-brand-secondary:hover {
+    background-color: var(--brand-secondary);
+  }
+
+  .hover\:text-brand-primary:hover {
+    color: var(--brand-primary);
+  }
+
+  .hover\:text-brand-secondary:hover {
+    color: var(--brand-secondary);
+  }
+
+  .focus\:ring-brand-primary:focus {
+    --tw-ring-color: var(--brand-primary);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-secondary);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading animations */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Fade in animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom focus styles */
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--brand-primary);
+}
+
+/* Button hover effects */
+.btn-hover {
+  transition: all 0.2s ease-in-out;
+  transform: scale(1);
+}
+
+.btn-hover:hover {
+  transform: scale(1.05);
+}
+
+.btn-hover:active {
+  transform: scale(0.95);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: translateY(-4px);
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(to right, var(--brand-primary), var(--brand-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Background patterns */
+.bg-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(101, 28, 50, 0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .tablet-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .desktop-padding {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
