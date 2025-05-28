@@ -1,19 +1,14 @@
+"use client"
 
 import { useState, useEffect } from "react"
 import { Trash2 } from "lucide-react"
 import { Button } from "../ui/Button"
 import { Card } from "../ui/Card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
 
 import { ref, onValue, remove } from "firebase/database"
 import { db } from "../../config/firebaseConfig"
+import { toast } from "sonner"
 
 interface Category {
   id: string
@@ -35,15 +30,12 @@ export function CategoryList() {
   })
   const [isDeleting, setIsDeleting] = useState(false)
 
-  // Fetch categories from Firebase on component mount
   useEffect(() => {
     const categoriesRef = ref(db, "categories")
 
-    // Listen for real-time updates
     const unsubscribe = onValue(categoriesRef, (snapshot) => {
       const data = snapshot.val()
       if (data) {
-        // Convert Firebase object to array of categories
         const categoryList: Category[] = Object.entries(data).map(([key, value]: [string, any]) => ({
           id: key,
           name: value.name,
@@ -52,11 +44,10 @@ export function CategoryList() {
         }))
         setCategories(categoryList)
       } else {
-        setCategories([]) // Clear categories if no data exists
+        setCategories([])
       }
     })
 
-    // Cleanup listener on component unmount
     return () => unsubscribe()
   }, [])
 
@@ -83,11 +74,11 @@ export function CategoryList() {
     try {
       const categoryRef = ref(db, `categories/${deleteModal.categoryId}`)
       await remove(categoryRef)
-      console.log(`Category ${deleteModal.categoryId} deleted successfully`)
+      toast.success(`Category deleted successfully`)
       closeDeleteModal()
     } catch (error) {
       console.error("Error deleting category:", error)
-      alert("Failed to delete category. Please try again.")
+      toast.error("Failed to delete category. Please try again.")
     } finally {
       setIsDeleting(false)
     }
@@ -105,13 +96,13 @@ export function CategoryList() {
             >
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-[#651C32] truncate">{category.name}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2 sm:line-clamp-1">{category.description}</p>
+                <p className="text-sm text-gray-600 line-clamp-2 sm:line-clamp-1 break-words">{category.description}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {category.productCount} {category.productCount === 1 ? "product" : "products"}
                 </p>
               </div>
 
-              <div className="flex justify-end sm:justify-start">
+              <div className="flex justify-end sm:justify-start flex-shrink-0">
                 <Button
                   size="sm"
                   variant="outline"
@@ -134,23 +125,22 @@ export function CategoryList() {
         </div>
       </Card>
 
-      {/* Delete Confirmation Modal */}
       <Dialog open={deleteModal.isOpen} onOpenChange={closeDeleteModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md mx-4">
           <DialogHeader>
             <DialogTitle className="text-red-600">Delete Category</DialogTitle>
             <DialogDescription className="text-sm sm:text-base">
               Are you sure you want to delete the category{" "}
-              <span className="font-semibold text-gray-900">"{deleteModal.categoryName}"</span>?
+              <span className="font-semibold text-gray-900 break-words">"{deleteModal.categoryName}"</span>?
               <br />
               <span className="text-red-500 text-xs sm:text-sm mt-2 block">This action cannot be undone.</span>
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex  flex-col-reverse sm:flex-row gap-2 sm:gap-5">
+          <DialogFooter className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
             <Button variant="outline" onClick={closeDeleteModal} disabled={isDeleting} className="w-full sm:w-auto">
               Cancel
             </Button>
-            <Button  onClick={handleDelete} disabled={isDeleting} className="w-full sm:w-auto">
+            <Button onClick={handleDelete} disabled={isDeleting} className="w-full sm:w-auto">
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
