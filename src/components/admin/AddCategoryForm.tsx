@@ -6,6 +6,7 @@ import { Card } from "../ui/Card";
 
 import { ref, push } from 'firebase/database'; // Import v9 modular methods
 import { db } from "../../config/firebaseConfig";
+import { toast } from "sonner";
 
 export function AddCategoryForm() {
   const [formData, setFormData] = useState({
@@ -21,11 +22,11 @@ export function AddCategoryForm() {
     try {
       // Use ref and push from the v9 modular API
       await push(ref(db, "categories"), formData);
-      alert(`Category "${formData.name}" added successfully!`);
+      toast.success(`Category "${formData.name}" added successfully!`)
       setFormData({ name: "", description: "" });
     } catch (error) {
       console.error("Error adding category:", error);
-      alert("Failed to add category. Please try again.");
+      toast.success("Failed to add category. Please try again.")
     } finally {
       setIsSubmitting(false);
     }

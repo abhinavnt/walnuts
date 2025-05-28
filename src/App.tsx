@@ -16,12 +16,14 @@ import { AdminLoginPage } from "./pages/auth/AdminLoginPage"
 import { AdminDashboard } from "./pages/admin/AdminDashboard"
 import { AdminProducts } from "./pages/admin/AdminProducts"
 import { AdminCategories } from "./pages/admin/AdminCategories"
+import { Toaster } from "sonner"
 
 // import "./styles/global.css"
 
 function App() {
   return (
     <Router>
+      <Toaster />
       <div className="min-h-screen bg-[#FAEDE2]">
         <Routes>
           {/* Public Routes */}
