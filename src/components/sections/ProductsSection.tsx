@@ -1,96 +1,121 @@
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { ScrollReveal } from "../animations/ScrollReveal";
+import { StaggerContainer, itemVariants } from "../animations/StaggerContainer";
+import { ref as firebaseRef, onValue, off } from "firebase/database";
+import { db } from "../../config/firebaseConfig";
 
-import { useState, useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { Heart, Star } from "lucide-react"
-import { ScrollReveal } from "../animations/ScrollReveal"
-import { StaggerContainer, itemVariants } from "../animations/StaggerContainer"
+// Define Category and Product interfaces
+interface Category {
+  id: string;
+  name: string;
+}
 
-const products = [
-  {
-    id: 1,
-    name: "Libyan Dark Dates",
-    price: 450,
-    originalPrice: 500,
-    image: "https://via.placeholder.com/300x300/8B4513/FFFFFF?text=Dates",
-    category: "dates",
-    tag: "Premium Quality",
-    rating: 4.8,
-    reviews: 124,
-  },
-  {
-    id: 2,
-    name: "Mixed Dry Fruits & Nuts",
-    price: 800,
-    originalPrice: 900,
-    image: "https://via.placeholder.com/300x300/D2691E/FFFFFF?text=Mixed+Nuts",
-    category: "nuts",
-    tag: "Best Seller",
-    rating: 4.9,
-    reviews: 89,
-  },
-  {
-    id: 3,
-    name: "American Almond",
-    price: 650,
-    originalPrice: 700,
-    image: "https://via.placeholder.com/300x300/CD853F/FFFFFF?text=Almonds",
-    category: "nuts",
-    tag: "Fresh Stock",
-    rating: 4.7,
-    reviews: 156,
-  },
-  {
-    id: 4,
-    name: "Golden Raisins",
-    price: 350,
-    originalPrice: 400,
-    image: "https://via.placeholder.com/300x300/DAA520/FFFFFF?text=Raisins",
-    category: "dry-fruits",
-    tag: "Organic",
-    rating: 4.6,
-    reviews: 78,
-  },
-  {
-    id: 5,
-    name: "Cashew Nuts",
-    price: 750,
-    originalPrice: 800,
-    image: "https://via.placeholder.com/300x300/F5DEB3/000000?text=Cashews",
-    category: "nuts",
-    tag: "Premium",
-    rating: 4.8,
-    reviews: 203,
-  },
-  {
-    id: 6,
-    name: "Egyptian Brown Dates",
-    price: 400,
-    originalPrice: 450,
-    image: "https://via.placeholder.com/300x300/A0522D/FFFFFF?text=Brown+Dates",
-    category: "dates",
-    tag: "Sweet & Soft",
-    rating: 4.9,
-    reviews: 167,
-  },
-]
-
-const categories = [
-  { id: "all", name: "All Products", color: "bg-[#651C32]" },
-  { id: "dates", name: "Dates", color: "bg-amber-500" },
-  { id: "nuts", name: "Nuts", color: "bg-emerald-500" },
-  { id: "dry-fruits", name: "Dry Fruits", color: "bg-purple-500" },
-]
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  description: string;
+  categoryId: string;
+  tag: string;
+  image?: string;
+  rating?: number;
+  reviews?: number;
+}
 
 export function ProductsSection() {
-  const [activeCategory, setActiveCategory] = useState("all")
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [featuredCategories, setFeaturedCategories] = useState<Category[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const sectionRef = useRef(null); // Renamed to avoid conflict with Firebase ref
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
+  // Fetch categories and products from Firebase
+  useEffect(() => {
+    const categoriesRef = firebaseRef(db, "categories");
+    const productsRef = firebaseRef(db, "products");
+
+    // Listener for categories
+    const categoriesListener = onValue(categoriesRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const categoriesList = Object.entries(data).map(([id, category]) => ({
+          id,
+          name: (category as { name: string }).name,
+        }));
+        // Sort by name and take first three
+        const sortedCategories = categoriesList.sort((a, b) => a.name.localeCompare(b.name)).slice(0, 3);
+        setFeaturedCategories(sortedCategories);
+      } else {
+        setFeaturedCategories([]);
+      }
+    });
+
+    // Listener for products
+    const productsListener = onValue(productsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const productsList = Object.entries(data).map(([id, product]) => {
+          const p = product as {
+            name: string;
+            price: string;
+            originalPrice?: string;
+            description: string;
+            categoryId: string;
+            tag: string;
+            image?: string;
+            rating?: number;
+            reviews?: number;
+          };
+          return {
+            id,
+            name: p.name,
+            price: parseFloat(p.price),
+            originalPrice: p.originalPrice ? parseFloat(p.originalPrice) : undefined,
+            description: p.description,
+            categoryId: p.categoryId,
+            tag: p.tag,
+            image: p.image,
+            rating: p.rating,
+            reviews: p.reviews,
+          };
+        });
+        setAllProducts(productsList);
+      } else {
+        setAllProducts([]);
+      }
+    });
+
+    // Cleanup listeners on unmount
+    return () => {
+      off(categoriesRef, "value", categoriesListener);
+      off(productsRef, "value", productsListener);
+    };
+  }, []);
+
+  // Filter products based on activeCategory and limit to 6
   const filteredProducts =
-    activeCategory === "all" ? products : products.filter((product) => product.category === activeCategory)
+    activeCategory === "all"
+      ? allProducts
+      : allProducts.filter((product) => product.categoryId === activeCategory);
+  const displayedProducts = filteredProducts.slice(0, 6);
+
+  // Define colors for category buttons
+  const categoryColors = ["bg-amber-500", "bg-emerald-500", "bg-purple-500"];
+
+  // Create filter options with "All Products" and three categories
+  const filterOptions = [
+    { id: "all", name: "All Products", color: "bg-[#651C32]" },
+    ...featuredCategories.map((category, index) => ({
+      id: category.id,
+      name: category.name,
+      color: categoryColors[index % categoryColors.length], 
+    })),
+  ];
 
   return (
-    <section ref={ref} className="py-24 bg-white relative overflow-hidden">
+    <section ref={sectionRef} className="py-24 bg-white relative overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-[#FAEDE2]/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#651C32]/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
@@ -112,15 +137,14 @@ export function ProductsSection() {
 
             {/* Category Filter */}
             <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {categories.map((category) => (
+              {filterOptions.map((category) => (
                 <motion.button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                    activeCategory === category.id
-                      ? `${category.color} text-white shadow-lg scale-105`
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${activeCategory === category.id
+                    ? `${category.color} text-white shadow-lg scale-105`
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   layout
@@ -133,7 +157,7 @@ export function ProductsSection() {
         </ScrollReveal>
 
         <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProducts.map((product, index) => (
+          {displayedProducts.map((product, index) => (
             <motion.div key={product.id} variants={itemVariants} layout className="group">
               <motion.div
                 className="bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 cursor-pointer"
@@ -160,16 +184,10 @@ export function ProductsSection() {
                     </motion.span>
                   </div>
 
-                  <motion.button
-                    className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Heart className="w-5 h-5 text-gray-600 hover:text-red-500 transition-colors" />
-                  </motion.button>
+
 
                   {/* Discount Badge */}
-                  {product.originalPrice > product.price && (
+                  {product.originalPrice && product.originalPrice > product.price && (
                     <motion.div
                       className="absolute bottom-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg"
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -183,24 +201,7 @@ export function ProductsSection() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <motion.div
-                    className="flex items-center space-x-1 mb-2"
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                  >
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(product.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                    <span className="text-sm text-gray-600 ml-2">
-                      {product.rating} ({product.reviews})
-                    </span>
-                  </motion.div>
+
 
                   <motion.h3
                     className="text-xl font-serif font-bold text-[#651C32] mb-3 group-hover:text-[#8B2635] transition-colors"
@@ -220,7 +221,7 @@ export function ProductsSection() {
                       >
                         ₹{product.price}
                       </motion.span>
-                      {product.originalPrice > product.price && (
+                      {product.originalPrice && product.originalPrice > product.price && (
                         <motion.span
                           className="text-lg text-gray-500 line-through"
                           initial={{ opacity: 0, x: 10 }}
@@ -232,13 +233,7 @@ export function ProductsSection() {
                       )}
                     </div>
 
-                    <motion.div
-                      className="text-[#651C32] font-semibold hover:text-[#8B2635] transition-colors cursor-pointer"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      View Details
-                    </motion.div>
+
                   </div>
                 </div>
 
@@ -273,5 +268,5 @@ export function ProductsSection() {
         </ScrollReveal>
       </div>
     </section>
-  )
+  );
 }
