@@ -1,4 +1,3 @@
-"use client"
 
 import { AdminLayout } from "../../components/admin/AdminLayout"
 import { CategoryList } from "../../components/admin/CategoryList"

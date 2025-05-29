@@ -1,4 +1,3 @@
-import { ContactForm } from "../components/contact/ContactForm"
 import { ContactInfo } from "../components/contact/ContactInfo"
 
 export function ContactPage() {
@@ -15,9 +14,8 @@ export function ContactPage() {
 
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="flex justify-center">
             <ContactInfo />
-            <ContactForm />
           </div>
         </div>
       </section>

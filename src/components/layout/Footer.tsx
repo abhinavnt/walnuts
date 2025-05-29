@@ -8,7 +8,9 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
+            <Link to="/admin/login">
             <h3 className="text-xl font-serif font-bold">Walnuts</h3>
+            </Link>
             <p className="text-white/80 text-sm">
               Premium quality dates, nuts, and chocolates for a healthier lifestyle.
             </p>

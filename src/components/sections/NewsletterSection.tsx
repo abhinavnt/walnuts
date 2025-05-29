@@ -1,8 +1,5 @@
 
-import { Button } from "../ui/Button"
-import { Input } from "../ui/Input"
 import { ScrollReveal } from "../animations/ScrollReveal"
-import { motion } from "framer-motion"
 
 export function NewsletterSection() {
   return (
@@ -22,30 +19,10 @@ export function NewsletterSection() {
                 Stay Updated with Our
                 <span className="block text-[#FAEDE2]">Latest Offers</span>
               </h2>
-              <p className="text-white/90 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-                Subscribe to our newsletter and be the first to know about new products, special discounts, and
-                exclusive deals.
-              </p>
+
             </div>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 bg-white/90 backdrop-blur-sm text-gray-900 border-0 rounded-full px-6 py-4"
-              />
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button className="bg-[#FAEDE2] text-[#651C32] hover:bg-white rounded-full px-8 py-4 font-semibold">
-                  Subscribe
-                </Button>
-              </motion.div>
-            </motion.div>
 
-            <p className="text-white/70 text-sm mt-6">We respect your privacy. Unsubscribe at any time.</p>
           </div>
         </ScrollReveal>
       </div>

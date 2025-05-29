@@ -121,7 +121,7 @@ export function HeroSection() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
                   size="lg"
-                  className="bg-[#FAEDE2] text-[#651C32] hover:bg-white text-lg px-8 py-6 rounded-full font-semibold shadow-2xl"
+                  className="border-2 border-white text-white text-lg px-8 py-6 rounded-full font-semibold shadow-2xl"
                 >
                   Explore Products
                   <motion.span
@@ -137,7 +137,7 @@ export function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-[#651C32] text-lg px-8 py-6 rounded-full font-semibold backdrop-blur-sm"
+                  className="border-2 border-white text-white  hover:text-[#651C32] text-lg px-8 py-6 rounded-full font-semibold backdrop-blur-sm"
                 >
                   Learn More
                 </Button>

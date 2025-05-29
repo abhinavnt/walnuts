@@ -1,4 +1,3 @@
-"use client"
 
 import { Link, useLocation } from "react-router-dom"
 import {  Package, FolderOpen, X } from "lucide-react"
