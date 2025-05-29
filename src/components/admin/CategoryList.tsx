@@ -1,10 +1,8 @@
-
 import { useState, useEffect } from "react"
 import { Trash2 } from "lucide-react"
 import { Button } from "../ui/Button"
 import { Card } from "../ui/Card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
-
 import { ref, onValue, remove } from "firebase/database"
 import { db } from "../../config/firebaseConfig"
 import { toast } from "sonner"
@@ -18,6 +16,7 @@ interface Category {
 
 export function CategoryList() {
   const [categories, setCategories] = useState<Category[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean
     categoryId: string
@@ -28,6 +27,7 @@ export function CategoryList() {
     categoryName: "",
   })
   const [isDeleting, setIsDeleting] = useState(false)
+  const pageSize = 5
 
   useEffect(() => {
     const categoriesRef = ref(db, "categories")
@@ -49,6 +49,20 @@ export function CategoryList() {
 
     return () => unsubscribe()
   }, [])
+
+  useEffect(() => {
+    const totalPages = Math.ceil(categories.length / pageSize)
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    } else if (totalPages === 0) {
+      setCurrentPage(1)
+    }
+  }, [categories, currentPage, pageSize])
+
+  const indexOfLastCategory = currentPage * pageSize
+  const indexOfFirstCategory = indexOfLastCategory - pageSize
+  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory)
+  const totalPages = Math.ceil(categories.length / pageSize)
 
   const openDeleteModal = (id: string, name: string) => {
     setDeleteModal({
@@ -88,7 +102,7 @@ export function CategoryList() {
       <Card className="p-4 sm:p-6">
         <h3 className="text-lg font-semibold text-[#651C32] mb-4">Category Management</h3>
         <div className="space-y-3 sm:space-y-4">
-          {categories.map((category) => (
+          {currentCategories.map((category) => (
             <div
               key={category.id}
               className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border rounded-lg gap-3 sm:gap-4"
@@ -122,6 +136,27 @@ export function CategoryList() {
             </div>
           )}
         </div>
+        {categories.length > 0 && (
+          <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+            <Button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="w-full sm:w-auto"
+            >
+              Previous
+            </Button>
+            <span className="text-sm text-gray-600 order-first sm:order-none">
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="w-full sm:w-auto"
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </Card>
 
       <Dialog open={deleteModal.isOpen} onOpenChange={closeDeleteModal}>
