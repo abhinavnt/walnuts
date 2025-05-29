@@ -19,7 +19,7 @@ export function AdminLoginPage() {
     setTimeout(() => {
       if (credentials.username === "admin" && credentials.password === "admin123") {
         localStorage.setItem("adminLoggedIn", "true")
-        navigate("/admin/dashboard")
+        navigate("/admin/products")
       } else {
         alert("Invalid credentials. Use admin/admin123 for demo.")
       }

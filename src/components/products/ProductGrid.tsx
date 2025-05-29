@@ -1,10 +1,22 @@
+import { Star } from "lucide-react";
+import { motion } from "framer-motion";
 
-import { Heart, Star } from "lucide-react"
-import { motion } from "framer-motion"
-import type { Product } from "../../data/products"
+// Define Product interface
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  originalPrice?: number;
+  description: string;
+  categoryId: string;
+  tag: string;
+  image?: string;
+  rating?: number;
+  reviews?: number;
+}
 
 interface ProductGridProps {
-  products: Product[]
+  products: Product[];
 }
 
 export function ProductGrid({ products }: ProductGridProps) {
@@ -13,7 +25,7 @@ export function ProductGrid({ products }: ProductGridProps) {
       <div className="text-center py-12">
         <p className="text-gray-600">No products found in this category.</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -31,17 +43,15 @@ export function ProductGrid({ products }: ProductGridProps) {
             <img
               src={product.image || "/placeholder.svg"}
               alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover "
             />
             <div className="absolute top-4 left-4">
               <span className="bg-[#651C32] text-white px-3 py-1 rounded-full text-xs font-medium">{product.tag}</span>
             </div>
-            <button className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors">
-              <Heart className="w-4 h-4 text-gray-600 hover:text-red-500 transition-colors" />
-            </button>
+           
 
             {/* Discount Badge */}
-            {product.originalPrice > product.price && (
+            {product.originalPrice && product.originalPrice > product.price && (
               <div className="absolute bottom-4 left-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                 {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
               </div>
@@ -60,7 +70,7 @@ export function ProductGrid({ products }: ProductGridProps) {
                   />
                 ))}
                 <span className="text-sm text-gray-600 ml-2">
-                  {product.rating} ({product.reviews})
+                  {product.rating} ({product.reviews || 0})
                 </span>
               </div>
             )}
@@ -73,18 +83,16 @@ export function ProductGrid({ products }: ProductGridProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <span className="text-xl font-bold text-[#651C32]">₹{product.price}</span>
-                {product.originalPrice > product.price && (
+                {product.originalPrice && product.originalPrice > product.price && (
                   <span className="text-sm text-gray-500 line-through">₹{product.originalPrice}</span>
                 )}
               </div>
 
-              <div className="text-[#651C32] font-semibold hover:text-[#8B2635] transition-colors cursor-pointer">
-                View Details
-              </div>
+             
             </div>
           </div>
         </motion.div>
       ))}
     </div>
-  )
+  );
 }

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Menu, X, User } from "lucide-react"
 import { Button } from "../ui/Button"
+import img from "../../assets/transparent_logo.png"
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,7 +17,7 @@ export function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="text-xl text-[#f3e8de] text- font-serif font-bold">Walnuts</div>
+            <img src={img} alt="logo" className="h-10" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -44,15 +45,13 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Admin Login & Mobile Menu */}
+          
           <div className="flex items-center space-x-4">
             <Link to="/admin/login">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-[#FAEDE2] hover:text-[#651C32]">
-                <User className="w-4 h-4" />
-              </Button>
+             
             </Link>
 
-            {/* Mobile menu button */}
+           
             <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>

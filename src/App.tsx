@@ -13,15 +13,17 @@ import { ContactPage } from "./pages/ContactPage"
 import { AdminLoginPage } from "./pages/auth/AdminLoginPage"
 
 // Admin Pages
-import { AdminDashboard } from "./pages/admin/AdminDashboard"
+
 import { AdminProducts } from "./pages/admin/AdminProducts"
 import { AdminCategories } from "./pages/admin/AdminCategories"
+import { Toaster } from "sonner"
 
 // import "./styles/global.css"
 
 function App() {
   return (
     <Router>
+      <Toaster />
       <div className="min-h-screen bg-[#FAEDE2]">
         <Routes>
           {/* Public Routes */}
@@ -73,14 +75,7 @@ function App() {
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
           {/* Private Admin Routes */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <PrivateRoute>
-                <AdminDashboard />
-              </PrivateRoute>
-            }
-          />
+         
 
           <Route
             path="/admin/products"
@@ -117,7 +112,9 @@ function App() {
             }
           />
         </Routes>
+        
       </div>
+      
     </Router>
   )
 }
