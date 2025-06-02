@@ -5,17 +5,18 @@ import { Button } from "../ui/Button"
 import { TrendingUp, Users, Award } from "lucide-react"
 import { ScrollReveal } from "../animations/ScrollReveal"
 import { StaggerContainer, itemVariants } from "../animations/StaggerContainer"
-import img from "../../assets/nuts.png"
+import img from "../../assets/combo2.png"
+import { useNavigate } from "react-router-dom"
 const stats = [
-  { icon: TrendingUp, value: "5+", label: "Years Experience", color: "text-green-600" },
-  { icon: Users, value: "50", label: "Product Varieties", color: "text-blue-600" },
-  { icon: Award, value: "1000+", label: "Happy Customers", color: "text-purple-600" },
+  { icon: TrendingUp, value: "7+", label: "Years Experience", color: "text-green-600" },
+  { icon: Users, value: "300+", label: "Product Varieties", color: "text-blue-600" },
+  { icon: Award, value: "25K+", label: "Happy Customers", color: "text-purple-600" },
 ]
 
 export function AboutSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
-
+  const navigate=useNavigate()
   return (
     <section ref={ref} className="py-24 bg-white relative overflow-hidden">
       {/* Background Decorations */}
@@ -85,7 +86,7 @@ export function AboutSection() {
                     Our Story
                   </span>
                   <h2 className="text-4xl lg:text-5xl font-serif font-bold text-[#651C32] leading-tight">
-                    Crafting Excellence in Every
+                   Crafting Delight in Every Gift and 
                     <span className="block text-[#8B2635]">Bite</span>
                   </h2>
                 </div>
@@ -95,14 +96,11 @@ export function AboutSection() {
             <ScrollReveal delay={0.4}>
               <div className="space-y-4">
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  At Walnuts, we believe in bringing you nature's finest treasures. Our carefully curated selection of
-                  premium dates, nuts, and chocolates represents the perfect harmony of{" "}
-                  <span className="text-[#651C32] font-semibold">taste, quality, and nutrition.</span>
+                 At Walnuts, we don’t just sell products—we curate indulgent experiences. From premium dates, handpicked nuts, and imported chocolates, to delightful candies, gourmet snacks, and luxurious personal care essentials, every item in our collection is selected for its exceptional.{" "}
+                  <span className="text-[#651C32] font-semibold">taste, quality, and presentation.</span>
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  Each product is handpicked to ensure you experience the best nature has to offer. From the sweetest
-                  Medjool dates to the crunchiest almonds and the richest chocolates, we are committed to delivering
-                  excellence in every bite.
+                 Whether you're creating a heartfelt engagement hamper, planning a birthday surprise, or simply savoring life’s little luxuries, we’re here to deliver joy—one bite at a time
                 </p>
               </div>
             </ScrollReveal>
@@ -119,6 +117,7 @@ export function AboutSection() {
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
+                  onClick={()=>navigate('/products')}
                     size="lg"
                     variant="outline"
                     className="border-2 border-[#651C32] text-[#651C32] hover:bg-[#651C32] hover:text-white px-8 py-6 rounded-full font-semibold"

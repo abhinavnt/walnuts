@@ -17,12 +17,14 @@ import { AdminLoginPage } from "./pages/auth/AdminLoginPage"
 import { AdminProducts } from "./pages/admin/AdminProducts"
 import { AdminCategories } from "./pages/admin/AdminCategories"
 import { Toaster } from "sonner"
+import ScrollToTop from "./utils/Scroll"
 
 // import "./styles/global.css"
 
 function App() {
   return (
     <Router>
+      <ScrollToTop/>
       <Toaster />
       <div className="min-h-screen bg-[#FAEDE2]">
         <Routes>

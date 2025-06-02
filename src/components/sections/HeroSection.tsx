@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { Button } from "../ui/Button"
 import { Star, Award, Truck, Shield } from "lucide-react"
 import img from "../../assets/ChatGPT Image May 27, 2025, 05_21_58 PM.png"
+import { useNavigate } from "react-router-dom"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,6 +28,7 @@ const itemVariants = {
 }
 
 export function HeroSection() {
+  const navigate=useNavigate()
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-[#651C32] via-[#8B2635] to-[#651C32] text-white overflow-hidden">
       {/* Animated Background Elements */}
@@ -73,7 +75,7 @@ export function HeroSection() {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                <span className="text-sm font-medium">Premium Quality Since 2019</span>
+                <span className="text-sm font-medium">Premium Quality Since 2018</span>
               </motion.div>
 
               <h1 className="text-5xl lg:text-7xl font-serif font-bold leading-tight">
@@ -83,7 +85,7 @@ export function HeroSection() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                 >
-                  Nature's
+                 Sweet 
                 </motion.span>
                 <motion.span
                   className="block bg-gradient-to-r from-[#FAEDE2] to-white bg-clip-text text-transparent"
@@ -91,7 +93,7 @@ export function HeroSection() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.5 }}
                 >
-                  Sweetest &
+                  Surprises for
                 </motion.span>
                 <motion.span
                   className="block"
@@ -99,7 +101,7 @@ export function HeroSection() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.7 }}
                 >
-                  Most Crunchy
+                  Every Special 
                 </motion.span>
                 <motion.span
                   className="block text-[#FAEDE2]"
@@ -107,19 +109,20 @@ export function HeroSection() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.9 }}
                 >
-                  Delights
+                  Moment
                 </motion.span>
               </h1>
             </motion.div>
 
             <motion.p variants={itemVariants} className="text-xl lg:text-2xl text-white/90 leading-relaxed max-w-xl">
-              Premium quality dates, nuts, and chocolates sourced from the finest farms. Experience the perfect blend of
-              <span className="text-[#FAEDE2] font-semibold"> taste, nutrition, and natural goodness.</span>
+             Premium quality dates, nuts, chocolates, sweets, perfumes, imported accessories, and Gulf items
+              <span className="text-[#FAEDE2] font-semibold"> celebration, and heartfelt gifting.</span>
             </motion.p>
 
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button
+                onClick={()=>navigate('/products')}
                   size="lg"
                   className="border-2 border-white text-white text-lg px-8 py-6 rounded-full font-semibold shadow-2xl"
                 >
@@ -221,7 +224,7 @@ export function HeroSection() {
               }}
             >
               <div className="text-center">
-                <div className="text-2xl font-bold">1000+</div>
+                <div className="text-2xl font-bold">25K+</div>
                 <div className="text-xs font-medium">Happy Customers</div>
               </div>
             </motion.div>

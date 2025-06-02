@@ -15,10 +15,10 @@ export function Footer() {
               Premium quality dates, nuts, and chocolates for a healthier lifestyle.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-white/80 hover:text-white">
+              <a href="https://www.facebook.com/share/12GHaen8ozR/?mibextid=wwXIfr " className="text-white/80 hover:text-white">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-white/80 hover:text-white">
+              <a href="https://www.instagram.com/walnutskoduvally/" className="text-white/80 hover:text-white">
                 <Instagram className="w-5 h-5" />
               </a>
             </div>
@@ -68,22 +68,23 @@ export function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex items-start space-x-2">
                 <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
-                <span className="text-white/80">VC Tower, Near Sanji Hypermarket, Opp. KMO, Koduvally</span>
+                <span className="text-white/80">Vc tower Opp kmo masjid near mpc hospital 𝗪𝗮𝘆𝗮𝗻𝗮𝗱 road Koduvally, 673572
+</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
-                <span className="text-white/80">+91 9876543210</span>
+                <span className="text-white/80">+91 6282026935</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
-                <span className="text-white/80">info@walnuts.com</span>
+                <span className="text-white/80">walnutdateschoclate@gmail.com</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="border-t border-white/20 mt-8 pt-8 text-center text-sm text-white/80">
-          <p>&copy; 2024 Walnuts - Dates, Nuts and Chocolates. All rights reserved.</p>
+          <p>&copy; 2018 Walnuts . All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -13,7 +13,7 @@ const features = [
   {
     icon: Truck,
     title: "Fast Delivery",
-    description: "Quick and reliable delivery to your doorstep",
+    description: "Quick and reliable delivery to your doorstep across India",
   },
   {
     icon: Heart,
@@ -49,9 +49,9 @@ export function WhyChooseUsSection() {
 
         <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <motion.div key={index} variants={itemVariants} className="text-center group">
+            <motion.div key={index} variants={itemVariants} className="text-center  group">
               <motion.div
-                className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500"
+                className="bg-white rounded-3xl h-[300px] p-8 shadow-lg hover:shadow-xl transition-all duration-500"
                 whileHover={{ y: -10, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >

@@ -81,14 +81,14 @@ export function CategoriesSection() {
                     />
 
                     {/* Floating Badge */}
-                    <motion.div
+                    {/* <motion.div
                       className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={isInView ? { opacity: 1, scale: 1 } : {}}
                       transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
                     >
                       <span className="text-sm font-semibold text-[#651C32]">{category.count}</span>
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Hover Overlay */}
                     <motion.div
