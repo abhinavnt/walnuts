@@ -4,6 +4,7 @@ import { ScrollReveal } from "../animations/ScrollReveal";
 import { StaggerContainer, itemVariants } from "../animations/StaggerContainer";
 import { ref as firebaseRef, onValue, off } from "firebase/database";
 import { db } from "../../config/firebaseConfig";
+import { Link } from "react-router-dom";
 
 // Define Category and Product interfaces
 interface Category {
@@ -261,7 +262,9 @@ export function ProductsSection() {
           <div className="text-center mt-16">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <button className="border-2 border-[#651C32] text-[#651C32] hover:bg-[#651C32] hover:text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg transition-all duration-300">
+                <Link to="/products">
                 Explore All Products
+                </Link>
               </button>
             </motion.div>
           </div>

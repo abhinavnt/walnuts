@@ -7,6 +7,7 @@ import { StaggerContainer, itemVariants } from "../animations/StaggerContainer"
 import dates from "../../assets/dates.png"
 import nuts from "../../assets/nuts_card.png"
 import dry_fruit from "../../assets/dry_fruit.png"
+import { Link } from "react-router-dom"
 const categories = [
   {
     name: "Dates",
@@ -61,7 +62,7 @@ export function CategoriesSection() {
         <StaggerContainer className="grid md:grid-cols-3 gap-8">
           {categories.map((category, index) => (
             <motion.div key={index} variants={itemVariants}>
-              <a href={`/products?category=${category.name.toLowerCase()}`} className="group block">
+              <Link to={`/products`} className="group block">
                 <motion.div
                   className="relative bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500"
                   whileHover={{ y: -10, scale: 1.02 }}
@@ -143,7 +144,7 @@ export function CategoriesSection() {
                     }}
                   />
                 </motion.div>
-              </a>
+              </Link>
             </motion.div>
           ))}
         </StaggerContainer>
@@ -152,13 +153,13 @@ export function CategoriesSection() {
         <ScrollReveal delay={0.8}>
           <div className="text-center mt-16">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <a
-                href="/products"
+              <Link
+                to="/products"
                 className="inline-flex items-center px-8 py-4 bg-[#651C32] text-white rounded-full font-semibold text-lg shadow-xl hover:bg-[#8B2635] transition-colors"
               >
                 View All categories
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </a>
+              </Link>
             </motion.div>
           </div>
         </ScrollReveal>
