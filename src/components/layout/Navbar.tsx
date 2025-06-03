@@ -1,8 +1,7 @@
-
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { Menu, X, User } from "lucide-react"
-import { Button } from "../ui/Button"
+import { Menu, X } from "lucide-react"
+
 import img from "../../assets/transparent_logo.png"
 
 export function Navbar() {

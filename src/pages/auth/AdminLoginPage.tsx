@@ -17,7 +17,7 @@ export function AdminLoginPage() {
 
     // Simulate API call
     setTimeout(() => {
-      if (credentials.username === "admin" && credentials.password === "admin123") {
+      if (credentials.username === "walnutstore" && credentials.password === "walnut123") {
         localStorage.setItem("adminLoggedIn", "true")
         navigate("/admin/products")
       } else {
@@ -69,13 +69,13 @@ export function AdminLoginPage() {
           </Button>
         </form>
 
-        <div className="mt-6 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
+        {/* <div className="mt-6 p-4 bg-gray-100 rounded-lg text-sm text-gray-600">
           <strong>Demo Credentials:</strong>
           <br />
           Username: admin
           <br />
           Password: admin123
-        </div>
+        </div> */}
       </Card>
     </div>
   )

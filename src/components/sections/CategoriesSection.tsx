@@ -34,7 +34,7 @@ const categories = [
 
 export function CategoriesSection() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  
 
   return (
     <section ref={ref} className="py-24 bg-gradient-to-br from-[#FAEDE2] to-white relative overflow-hidden">
