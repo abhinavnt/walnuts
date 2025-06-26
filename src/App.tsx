@@ -18,6 +18,7 @@ import { AdminProducts } from "./pages/admin/AdminProducts"
 import { AdminCategories } from "./pages/admin/AdminCategories"
 import { Toaster } from "sonner"
 import ScrollToTop from "./utils/Scroll"
+import { WhatsAppButton } from "./components/ui/WhatsAppButton"
 
 // import "./styles/global.css"
 
@@ -114,6 +115,11 @@ function App() {
             }
           />
         </Routes>
+
+         <WhatsAppButton 
+          phoneNumber="+916282026935" 
+          message="Hello! I'm interested in your products and would like to know more."
+        />
         
       </div>
       
